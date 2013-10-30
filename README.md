@@ -20,6 +20,7 @@ The provision script installs Apache 2 and enables modules for creating a load b
 
 Vagrant automatically shares the project directory to **/vagrant** in the VM - so you can code in the comfort of your host machine.
 *Note that the root user and password are both 'vagrant'*
+
 VirtualHost configs are symlinked to apache's "sites-available" directory from the root (/vagrant) to keep things simple.
 *Note that you probably shouldn't provision a server with the provision.sh because of this!*
 
