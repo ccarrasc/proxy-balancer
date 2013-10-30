@@ -1,5 +1,6 @@
 <VirtualHost *:80>
   
+  ServerName localhost
   ServerAdmin webmaster@localhost
   ProxyRequests off
   #ProxyHTMLExtended On
@@ -22,11 +23,12 @@
     
   </Proxy>
 
+  # Map a url path to our load balancer
   ProxyPass / balancer://mycluster/
+  # Let Apache adjust the URL in the Location, Content-Location and URI headers on HTTP redirect responses
   ProxyPassReverse / balancer://mycluster/
   
-  # Possible values include: debug, info, notice, warn, error, crit,
-  # alert, emerg.
+  # Possible values include: debug, info, notice, warn, error, crit, alert, emerg.
   LogLevel debug
   ErrorLog ${APACHE_LOG_DIR}/error.log
   CustomLog ${APACHE_LOG_DIR}/access.log combined

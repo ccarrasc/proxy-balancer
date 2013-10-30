@@ -5,17 +5,21 @@ sudo apt-get update
 # Install Apache HTTP Server
 sudo apt-get install apache2 -y
 
-# Enable modules for proxy, load balancing, and rewrites
+# Enable modules for proxy, load balancing, and ssl
 sudo a2enmod proxy
 sudo a2enmod proxy_http
 sudo a2enmod proxy_balancer
+sudo a2enmod ssl
 
 # Disable the default site
 sudo a2dissite default
 
 # Link and enable the load balancer
-sudo ln -s /vagrant/load-balancer /etc/apache2//sites-available/load-balancer
+sudo ln -s /vagrant/load-balancer /etc/apache2/sites-available/load-balancer
 sudo a2ensite load-balancer
+
+sudo ln -s /vagrant/load-balancer-ssl /etc/apache2/sites-available/load-balancer-ssl
+sudo a2ensite load-balancer-ssl
 
 # Restart Apache
 sudo apachectl restart

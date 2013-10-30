@@ -1,0 +1,44 @@
+<IFModule mod_ssl.c>
+  <VirtualHost *:443>
+    
+    ServerName localhost
+    ServerAdmin webmaster@localhost
+    
+    SSLEngine on
+    SSLProxyEngine On
+    SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
+    SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+    
+    ProxyRequests off
+    #ProxyHTMLExtended On
+    
+    <Proxy balancer://mycluster>
+
+      BalancerMember https://example.com
+      BalancerMember https://example.org
+      BalancerMember https://example.edu
+      
+      # Balancer load-balance method (Default is byrequests):
+      #   byrequests - to perform weighted request counting
+      #   bytraffic  - to perform weighted traffic byte count balancing
+      #   bybusyness - to perform pending request balancing
+      ProxySet lbmethod=byrequests
+
+      Order Deny,Allow
+      Deny from none
+      Allow from all
+      
+    </Proxy>
+
+    # Map a url path to our load balancer
+    ProxyPass / balancer://mycluster/
+    # Let Apache adjust the URL in the Location, Content-Location and URI headers on HTTP redirect responses
+    ProxyPassReverse / balancer://mycluster/
+    
+    # Possible values include: debug, info, notice, warn, error, crit, alert, emerg.
+    LogLevel debug
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+  </VirtualHost>
+</IFModule>
